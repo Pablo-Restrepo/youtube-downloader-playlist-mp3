@@ -1,0 +1,12 @@
+# Python files
+*.pyc
+__pycache__/
+
+# Video files
+*.mp4
+*.avi
+*.mov
+
+# Audio files
+*.mp3
+*.wav

@@ -1,0 +1,41 @@
+# YouTube Playlist MP3 Downloader
+
+This Python script allows you to download YouTube playlists in MP3 format.
+
+## Requirements
+
+- Python 3.x
+- `youtube_dl` library
+- `moviepy` library
+
+## Installation
+
+1. Clone this repository:
+
+    ```bash
+    git clone https://github.com/Pablo736/youtube-downloader-playlist-mp3
+    ```
+
+2. Install the dependencies:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Usage
+
+1. Run the `download_playlist.py` script:
+
+    ```bash
+    python download_playlist.py
+    ```
+
+2. Enter the URL of the YouTube playlist you want to download.
+
+3. Wait for the script to download all the videos from the playlist and convert them to MP3 format.
+
+4. The resulting MP3 files will be saved in the `music` folder.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

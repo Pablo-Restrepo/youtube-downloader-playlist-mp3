@@ -8,6 +8,22 @@ from pytube import Playlist
 from moviepy.editor import VideoFileClip
 
 
+# Directory where files will be saved.
+OUTPUT_DIRECTORY = "music"
+
+
+def delete_mp4_files(directory: str) -> None:
+    """
+    Delete all .mp4 files in the specified directory.
+
+    Args:
+        directory (str): The directory path.
+    """
+    for file in os.listdir(directory):
+        if file.endswith(".mp4"):
+            os.remove(os.path.join(directory, file))
+
+
 def convert_to_mp3(filename: str) -> None:
     """
     Convert a video file to MP3 format.
@@ -16,7 +32,8 @@ def convert_to_mp3(filename: str) -> None:
         filename (str): The name of the video file.
     """
     clip = VideoFileClip(filename)
-    clip.audio.write_audiofile(filename[:-4] + ".mp3")
+    mp3_filename = filename[:-4] + ".mp3"
+    clip.audio.write_audiofile(mp3_filename)
     clip.close()
 
 
@@ -32,13 +49,15 @@ def main() -> None:
         try:
             print("Downloading: " + video.title)
 
-            video.streams.get_highest_resolution().download()
-            convert_to_mp3(video.title + ".mp4")
-            os.remove(video.title + ".mp4")
+            video.streams.get_highest_resolution().download(OUTPUT_DIRECTORY)
+            convert_to_mp3(OUTPUT_DIRECTORY + '/' + video.title + ".mp4")
+            os.remove(os.path.join(OUTPUT_DIRECTORY, video.title + ".mp4"))
 
             print("Downloaded: " + video.title)
         except Exception as e:
             print("Error: " + str(e))
+
+    delete_mp4_files(OUTPUT_DIRECTORY)
 
 
 if __name__ == "__main__":
