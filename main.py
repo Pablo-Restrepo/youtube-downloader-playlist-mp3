@@ -12,6 +12,28 @@ from moviepy.editor import VideoFileClip
 OUTPUT_DIRECTORY = "music"
 
 
+def remove_slashes(string: str) -> str:
+    """
+    Remove slashes from a string.
+
+    Args:
+        string (str): The input string.
+
+    Returns:
+        str: The string without slashes.
+    """
+    string.replace("/", "")
+    string.replace("|", "")
+    string.replace("\"", "")
+    string.replace("-", "")
+    string.replace(",", "")
+    string.replace(".", "")
+    string.replace("ñ", "n")
+    string.replace("Ñ", "N")
+
+    return string
+
+
 def delete_mp4_files(directory: str) -> None:
     """
     Delete all .mp4 files in the specified directory.
@@ -47,9 +69,13 @@ def main() -> None:
 
     for video in playlist.videos:
         try:
+            video.title = remove_slashes(video.title)
             print("Downloading: " + video.title)
 
-            video.streams.get_highest_resolution().download(OUTPUT_DIRECTORY)
+            if not video.streams.get_highest_resolution().download(OUTPUT_DIRECTORY):
+                print("Error: Unable to download " + video.title)
+                continue
+
             convert_to_mp3(OUTPUT_DIRECTORY + '/' + video.title + ".mp4")
             os.remove(os.path.join(OUTPUT_DIRECTORY, video.title + ".mp4"))
 
