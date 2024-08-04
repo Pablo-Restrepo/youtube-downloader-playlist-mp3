@@ -19,28 +19,6 @@ class YouTubePlaylistDownloader:
     def __init__(self, output_directory="music"):
         self.output_directory = output_directory
 
-    @staticmethod
-    def __remove_slashes(string: str) -> str:
-        """
-        Remove slashes from a string.
-
-        Args:
-            string (str): The input string.
-
-        Returns:
-            str: The string without slashes.
-        """
-        string = string.replace("/", "")
-        string = string.replace("|", "")
-        string = string.replace("\"", "")
-        string = string.replace("-", "")
-        string = string.replace(",", "")
-        string = string.replace(".", "")
-        string = string.replace("ñ", "n")
-        string = string.replace("Ñ", "N")
-
-        return string
-
     def __delete_mp4_files(self, directory: str) -> None:
         """
         Delete all .mp4 files in the specified directory.
@@ -75,19 +53,24 @@ class YouTubePlaylistDownloader:
 
         for video in playlist.videos:
             try:
-                video.title = self.__remove_slashes(video.title)
-                print("Downloading: " + video.title)
+                video_title = video.title
+                video.title = 'video'
+                print("Downloading: " + video_title)
 
                 if not video.streams.get_highest_resolution().download(self.output_directory):
-                    print("Error: Unable to download " + video.title)
+                    print("Error: Unable to download " + video_title)
                     continue
 
                 self.__convert_to_mp3(os.path.join(
                     self.output_directory, video.title + ".mp4"))
+
+                os.rename(os.path.join(self.output_directory, video.title + ".mp3"), os.path.join(
+                    self.output_directory, video_title + ".mp3"))
+
                 os.remove(os.path.join(
                     self.output_directory, video.title + ".mp4"))
 
-                print("Downloaded: " + video.title)
+                print("Downloaded: " + video_title)
             except Exception as e:
                 print("Error: " + str(e))
 
